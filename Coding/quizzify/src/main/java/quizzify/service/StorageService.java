@@ -9,17 +9,21 @@ import quizzify.util.FileUtils;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
-import java.util.Date;
+import java.text.SimpleDateFormat;
+
 
 public class StorageService {
     private static final String QUIZ_DIR = "quizzes";
 
-    
+    //manually edited
     public void saveQuiz(Quiz quiz) {
         try {
             File dir = new File(QUIZ_DIR);
             if (!dir.exists()) dir.mkdirs();
-            String fileName = quiz.getTitle().replaceAll("[^a-zA-Z0-9-_]", "_") + "_" + quiz.getCreatedDate().getTime() + ".json";
+
+            String sanitizedTitle = quiz.getTitle().replaceAll("[^a-zA-Z0-9-_]", "_");
+            String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(quiz.getCreatedDate());
+            String fileName = sanitizedTitle + "_" + timestamp + ".json";
             String filePath = QUIZ_DIR + File.separator + fileName;
             FileUtils.writeJsonToFile(quiz, filePath);
             System.out.println("Quiz saved to: " + filePath);
